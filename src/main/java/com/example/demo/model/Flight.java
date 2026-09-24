@@ -13,10 +13,13 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Data
 @NoArgsConstructor
@@ -35,17 +38,28 @@ public class Flight {
 
     private Timestamp arrivalDate;
 
+    private int estimatedPassengers;
+
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn (name = "airplane_id", nullable = false)
     private Airplane airplane;
 
-    @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JoinColumn (name = "origin_airport_id")
     private Airport originAirport;
 
-    @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, orphanRemoval = true)
+    // @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, orphanRemoval = true)
+    // private Airport originAirport;
+
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JoinColumn (name = "destination_airport_id")
     private Airport destinationAirport;
+
+    // @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, orphanRemoval = true)
+    // private Airport destinationAirport;
     
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "destination_airport_id", nullable = false)
+    @ToString.Exclude
+    @JsonIgnore 
+    @OneToMany (mappedBy = "flight", cascade =  CascadeType.ALL, orphanRemoval = true)
     private List<TicketFlight> ticketFlights = new ArrayList<>();
 }

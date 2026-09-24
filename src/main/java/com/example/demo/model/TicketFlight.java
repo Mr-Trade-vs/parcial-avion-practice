@@ -1,7 +1,5 @@
 package com.example.demo.model;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -13,8 +11,16 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
+@Entity 
+@Data 
+@NoArgsConstructor 
+@AllArgsConstructor 
+@Builder 
+@Table (name = "ticket_flights")
 
 public class TicketFlight {
 
@@ -24,13 +30,11 @@ public class TicketFlight {
 
     private Integer segmentOrder;
 
-    @JsonIgnore
-    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "flight_id", nullable = false)
+    @JoinColumn(name = "ticket_id", nullable = false)
     private Ticket ticket;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ticket_id", nullable = false)
-    private List<Flight> flight;
+    @JoinColumn(name = "flight_id", nullable = false)
+    private Flight flight;
 }

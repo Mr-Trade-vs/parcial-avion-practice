@@ -16,8 +16,9 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Data
 @NoArgsConstructor
@@ -36,14 +37,27 @@ public class Ticket {
 
     private Timestamp purchaseDate;
 
-    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "destination_airport_id", nullable = false)
-    private Airport originAirport;
-    
-    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "origin_airport_id", nullable = false)
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JoinColumn (name = "origin_airport_id")
+    private Airport originAiport;
+
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JoinColumn (name = "destination_airport_id")
     private Airport destinationAirport;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Ticket ticketFlights;
+    @ToString.Exclude
+    @JsonIgnore
+    @OneToMany (mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TicketFlight> ticketFlights;
+
+    // @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
+    // @JoinColumn(name = "destination_airport_id", nullable = false)
+    // private Airport originAirport;
+    
+    // @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
+    // @JoinColumn(name = "origin_airport_id", nullable = false)
+    // private Airport destinationAirport;
+
+    // @ManyToOne(fetch = FetchType.LAZY)
+    // private Ticket ticketFlights;
 }
